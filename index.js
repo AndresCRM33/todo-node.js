@@ -55,6 +55,20 @@ app.put('/tareas/:id', (req, res) =>{
     res.json(tarea)
 })
 
+app.delete('/tareas/:id', (req, res) => {
+    const {id} = req.params
+
+    const tareaIndex = tareas.findIndex(tarea => tarea.id === parseInt(id))
+
+    if(tareaIndex === -1){
+        return res.status(404).json({error:"No existe la tarea"})
+    }
+
+    tareas.splice(tareaIndex, 1)
+
+    res.json({message: "tarea eliminada"})
+})
+
 //Poner a escuchar el servidor
 app.listen(PORT, () => {
     console.log("El servidor se está ejecutando en el puerto: " + PORT)
