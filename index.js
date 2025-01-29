@@ -20,6 +20,23 @@ app.get("/tareas", (req, res) =>{
     res.json(tareas)
 })
 
+app.post("/tareas", (req, res) => {
+    const {titulo, completado} = req.body //Extraemos los datos del body
+
+    if(!titulo){
+        res.status(400).json({error: "El título es obligatorio"})
+    }
+
+    const nuevaTarea = {
+        id: tareas.length + 1,
+        titulo: titulo,
+        completado: completado || false,
+    }
+
+    tareas.push(nuevaTarea)
+    res.status(201).json(nuevaTarea)
+})
+
 //Poner a escuchar el servidor
 app.listen(PORT, () => {
     console.log("El servidor se está ejecutando en el puerto: " + PORT)
