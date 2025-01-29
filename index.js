@@ -69,6 +69,27 @@ app.delete('/tareas/:id', (req, res) => {
     res.json({message: "tarea eliminada"})
 })
 
+/////////FILTROS////////////////////////////////////
+
+app.get("/tareas/completadas", (req, res) =>{
+    const tareasCompletadas = tareas.filter(tarea => tarea.completado)
+    if(tareasCompletadas.length == 0){
+        return res.status(404).json({error: "No hay tareas completadas"})
+    }
+
+    res.json(tareasCompletadas)
+})
+
+app.get("/tareas/incompletas", (req, res) =>{
+    const tareasIncompletas = tareas.filter(tarea => tarea.completado == false)
+    if(tareasIncompletas.length == 0){
+        return res.status(404).json({error: "No hay tareas incompletas"})
+    }
+    res.json(tareasIncompletas)
+})
+
+///////////////////////////////////////////////////
+
 //Poner a escuchar el servidor
 app.listen(PORT, () => {
     console.log("El servidor se está ejecutando en el puerto: " + PORT)
