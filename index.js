@@ -37,6 +37,24 @@ app.post("/tareas", (req, res) => {
     res.status(201).json(nuevaTarea)
 })
 
+app.put('/tareas/:id', (req, res) =>{
+    const {id} = req.params
+    const {titulo, completado} = req.body
+
+    const tareaIndex = tareas.findIndex(tarea => tarea.id === parseInt(id))
+
+    if(tareaIndex === -1){
+        return res.status(404).json({error: "No existe la tarea"})
+    }
+
+    //Actualizamos la tarea
+    const tarea = tareas[tareaIndex]
+    tarea.titulo = titulo || tarea.titulo
+    tarea.completado = completado !== undefined ? completado : tarea.completado
+
+    res.json(tarea)
+})
+
 //Poner a escuchar el servidor
 app.listen(PORT, () => {
     console.log("El servidor se está ejecutando en el puerto: " + PORT)
