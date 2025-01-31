@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "titulo": "Preprarar la merienda",
+    "completado": false
+  },
+  {
+    "id": 3,
+    "titulo": "Hacer la comida",
+    "completado": false
+  },
+  {
+    "id": 4,
+    "titulo": "Estudiar para el examen",
+    "completado": true
+  },
+  {
+    "id": 5,
+    "titulo": "Bañar al perro",
+    "completado": false
+  },
+  {
+    "id": 6,
+    "titulo": "Tender la cama",
+    "completado": true
+  }
+]

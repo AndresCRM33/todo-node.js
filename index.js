@@ -5,7 +5,33 @@ const app = express()
 //Configuramos el puerto para el servidor
 const PORT = 3000
 
-let tareas = []
+// let tareas = []
+
+/////////////////////////////////////////////////////7////////////
+const fs = require('fs');
+const path = require('path');
+
+const archivoTareas = path.join(__dirname, 'tareas.json');
+
+// Función para cargar tareas desde el archivo JSON
+const cargarTareas = () => {
+  try {
+    const data = fs.readFileSync(archivoTareas, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    return []; // Si el archivo no existe o hay un error, devolvemos un array vacío
+  }
+};
+
+// Función para guardar tareas en el archivo JSON
+const guardarTareas = (tareas) => {
+  fs.writeFileSync(archivoTareas, JSON.stringify(tareas, null, 2));
+};
+
+// Cargamos las tareas al iniciar el servidor
+let tareas = cargarTareas();
+
+//////////////////////////////////////////////////////////////////7
 
 //Middleware para processar JSON
 app.use(express.json())
@@ -27,13 +53,16 @@ app.post("/tareas", (req, res) => {
         res.status(400).json({error: "El título es obligatorio"})
     }
 
+    maxId = tareas.length > 0 ? Math.max(...tareas.map(tarea => tarea.id)) : 0 
+
     const nuevaTarea = {
-        id: tareas.length + 1,
+        id: maxId + 1,
         titulo: titulo,
         completado: completado || false,
     }
 
     tareas.push(nuevaTarea)
+    guardarTareas(tareas)
     res.status(201).json(nuevaTarea)
 })
 
@@ -52,6 +81,8 @@ app.put('/tareas/:id', (req, res) =>{
     tarea.titulo = titulo || tarea.titulo
     tarea.completado = completado !== undefined ? completado : tarea.completado
 
+    guardarTareas(tareas)
+
     res.json(tarea)
 })
 
@@ -65,6 +96,8 @@ app.delete('/tareas/:id', (req, res) => {
     }
 
     tareas.splice(tareaIndex, 1)
+
+    guardarTareas(tareas)
 
     res.json({message: "tarea eliminada"})
 })
