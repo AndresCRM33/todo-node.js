@@ -5,6 +5,8 @@ const app = express()
 //Configuramos el puerto para el servidor
 const PORT = 3000
 
+const cors = require("cors")
+
 // let tareas = []
 
 //Para usar un archivo json local////////////////////////////////////
@@ -47,6 +49,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/todoapp', {
 .catch(err => console.error('❌ Error al conectar a MongoDB:', err));
 
 //Middleware para processar JSON
+app.use(cors())
 app.use(express.json())
 
 //Creamos una ruta básica
