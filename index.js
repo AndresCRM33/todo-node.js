@@ -94,20 +94,20 @@ app.post('/tareas', async (req, res) => {
 
   app.put('/tareas/:id', async (req, res) => {
     try {
-      const { titulo, completado } = req.body;
-      const tarea = await Tarea.findByIdAndUpdate(req.params.id, 
-        { titulo, completado },
-        { new: true } // Retorna la tarea actualizada
-      );
-  
+      const tarea = await Tarea.findById(req.params.id);
+
       if (!tarea) {
-        return res.status(404).json({ error: 'No existe la tarea' });
+          return res.status(404).json({ error: "No existe la tarea" });
       }
-  
+
+      tarea.completado = !tarea.completado; // ✅ Toggle it here
+      await tarea.save();
+
       res.json(tarea);
-    } catch (error) {
-      res.status(500).json({ error: 'Error al actualizar tarea' });
-    }
+  } catch (error) {
+      console.error("Error en el servidor al completar tarea:", error);
+      res.status(500).json({ error: "Error al actualizar tarea" });
+  }
   });
   
 
